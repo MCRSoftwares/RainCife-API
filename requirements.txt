@@ -1,0 +1,9 @@
+scrapy
+scrapy-djangoitem
+scrapyd
+ipdb
+ipython
+celery
+django
+django-celery
+djangorestframework
