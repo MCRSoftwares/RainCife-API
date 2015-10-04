@@ -94,7 +94,7 @@ Uma vez clonado, entre na pasta do repositório:
 $ cd RainCife-API/
 ```
 
-Crie e Configure o arquivo ```settings.ini```. Baseie-se no arquivo ```example.settings.ini``` (mas não o apague). Segue abaixo um exemplo do arquivo preenchido.
+Crie e Configure o arquivo ```settings.ini```. Baseie-se no arquivo ```example.settings.ini``` (mas não o apague). Não é necessário usar todas as variáveis presentes, somente aquelas cujos valores tenham alguma importância no momento. Segue abaixo um exemplo do arquivo preenchido.
 *O valor da* ```SECRET_KEY``` *foi fornecido à equipe de desenvolvimento.*
 ```ini
 [settings]
@@ -104,7 +104,6 @@ Crie e Configure o arquivo ```settings.ini```. Baseie-se no arquivo ```example.s
 SECRET_KEY=abcdefghijklmnopqrstuvwxyz
 DEBUG=True
 DATABASE_URL=postgres://usuario:senha@localhost:5432/raincife
-# ADMIN_URL=admin
 
 # SCRAPY SETTINGS
 
