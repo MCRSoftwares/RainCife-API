@@ -6,7 +6,7 @@ em si, clique [aqui](https://github.com/MCRSoftwares/RainCife-API).
 
 ## Vagrant
 
-Caso esteja utilizando o [Vagrant](https://www.vagrantup.com/), basta executar os comandos abaixo:
+Caso esteja utilizando o [Vagrant](https://www.vagrantup.com/), basta executar os comandos abaixo (levará aproximadamente 10 minutos para configurar a máquina por completo):
 ```shell
 $ git clone https://github.com/MCRSoftwares/RainCife-API.git
 $ cd RainCife-API
@@ -18,7 +18,7 @@ Se ocorrer algum erro, execute:
 $ vagrant provision
 ```
 
-Caso os erros persistam, baixe esta [máquina virtual (*.box)]() e siga para o [próximo passo]().
+Caso os erros persistam, baixe esta [máquina virtual (raincife.box)]() e siga para o [próximo passo](#vagrant---instalando-uma-máquina-existente).
 
 Para **acessar** a máquina virtual, execute:
 ```shell
@@ -44,11 +44,28 @@ Tendo o Vagrant configurado e rodando corretamente, pule os próximos passos at�
 
 ## Vagrant - Instalando uma máquina existente
 
+Após baixar o arquivo ```raicife.box```, cole-o na pasta do projeto, no mesmo nível do arquivo ```Vagrantfile``` e execute o comando abaixo:
+```shell
+$ vagrant box add raincife raincife.box
+```
 
+Após a execução do comando, apague o arquivo ```Vagrantfile```, e tenha certeza de que a máquina virtual anterior (caso tenha tentado criar uma) ainda não exista:
+```shell
+$ vagrant destroy
+$ rm Vagrantfile
+```
+
+Agora, baixe ou copie este [Vagrantfile](https://gist.github.com/victorfsf/f6d802b3b94de8f0a168) e cole onde o antigo ```Vagrantfile``` estava. Dentro da mesma pasta, execute:
+```shell
+$ vagrant up
+$ vagrant ssh
+```
+
+Outros comandos do vagrant podem ser encontrado [acima](#vagrant).
 
 ## Pré-Requisitos
 
-Para instalar e rodar o sistema, deve-se utilizar uma máquina
+Para instalar e executar o sistema, deve-se utilizar uma máquina
 **Ubuntu** (não testado no Windows) com as seguintes configurações:
 
 |Package                                         |Comando                                 |
@@ -121,7 +138,7 @@ $ createdb nome_do_banco
 
 ## Configurando o sistema
 
-Com os pré-requisitos instalados, sua máquina está quase pronta para rodar
+Com os pré-requisitos instalados, sua máquina está quase pronta para executar
  o sistema. Mas antes, deve-se baixar a versão mais recente e configurá-la. Siga as instruções abaixo:
 
 ### Clonando o Repositório
@@ -164,7 +181,7 @@ CELERY_RESULT_BACKEND=redis://localhost:6379
 ```
 
 
-Agora, basta rodar o seguinte comando para instalar os requisitos, configurar
+Agora, basta executar o seguinte comando para instalar os requisitos, configurar
 o banco e criar um superuser:
 ```shell
 $ make init
@@ -175,7 +192,7 @@ Será pedida uma senha para o superuser. Coloque a senha que desejar.
 
 Segue abaixo uma lista de comandos para facilitar o desenvolvimento.
 
-### Rodar configurações iniciais
+### Executar configurações iniciais
 
 ```shell
 $ make init
@@ -199,12 +216,17 @@ $ make requirements
 $ make sync
 ```
 
-### Criar e rodar as migrações
+### Criar e executar as migrações
 Respectivamente:
 
 ```shell
 $ make makemig
 $ make mig
+```
+
+### Abrir o shell do Django
+```shell
+$ make shell
 ```
 
 ### Coletar os arquivos estáticos
