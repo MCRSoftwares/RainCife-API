@@ -5,8 +5,8 @@ contém somente a API do RainCife, para acessar o repositório da aplicação
 em si, clique [aqui](https://github.com/MCRSoftwares/RainCife-API).
 
 ## Vagrant
-
-Caso esteja utilizando o [Vagrant](https://www.vagrantup.com/), basta executar os comandos abaixo (levará aproximadamente 10 minutos para configurar a máquina por completo):
+Se não for utilizar o Vagrant, continue [aqui](#pré-requisitos).
+Caso esteja utilizando o [Vagrant](https://www.vagrantup.com/), basta executar os comandos abaixo (levará aproximadamente 20-30 minutos para configurar a máquina por completo):
 ```shell
 $ git clone https://github.com/MCRSoftwares/RainCife-API.git
 $ cd RainCife-API
@@ -38,6 +38,12 @@ $ vagrant halt
 Para **destruir** a máquina virtual, execute:
 ```shell
 $ vagrant destroy
+```
+
+Dentro da máquina virtual, execute os seguintes comandos para configurar o servidor do redis (pressione ```ENTER``` sempre que algo for pedido):
+```shell
+$ cd raincife/
+$ make redis.install
 ```
 
 Tendo o Vagrant configurado e rodando corretamente, pule os próximos passos até chegar em [Configurando o sistema](#configurando-o-sistema).
