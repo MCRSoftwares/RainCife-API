@@ -60,3 +60,11 @@ target/
 *.log
 **/migrations/**
 !**/migrations/__init__.py
+staticfiles/
+
+# SQLite
+*.sqlite3
+
+# Decouple
+settings.ini
+!example.settings.ini
