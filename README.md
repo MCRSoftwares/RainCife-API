@@ -82,12 +82,12 @@ $ createdb nome_do_banco
 Com os pré-requisitos instalados, sua máquina está quase pronta para rodar
  o sistema. Mas antes, deve-se baixar a versão mais recente e configurá-la. Siga as instruções abaixo:
 
- ### Clonando o Repositório
+### Clonando o Repositório
  ```shell
 $ git clone https://github.com/MCRSoftwares/RainCife-API.git
  ```
 
- ### Configurando
+### Configurando
 
 Uma vez clonado, entre na pasta do repositório:
 ```shell
