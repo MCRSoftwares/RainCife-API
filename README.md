@@ -177,7 +177,7 @@ $ make static
 $ make crawl spider=nome_da_spider
 ```
 
-### Iniciar e parar o Redis:
+### Iniciar e parar o Redis
 Respectivamente:
 
 ```shell
