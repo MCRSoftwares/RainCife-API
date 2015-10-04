@@ -94,7 +94,11 @@ Uma vez clonado, entre na pasta do repositório:
 $ cd RainCife-API/
 ```
 
-Crie e Configure o arquivo ```settings.ini```. Baseie-se no arquivo ```example.settings.ini``` (mas não o apague). Não é necessário usar todas as variáveis presentes, somente aquelas cujos valores tenham alguma importância no momento. Segue abaixo um exemplo do arquivo preenchido.
+Crie e Configure o arquivo ```settings.ini```. Baseie-se no arquivo
+```example.settings.ini``` (mas não o apague). Não é necessário usar todas
+as variáveis presentes, somente aquelas cujos valores tenham alguma
+importância no momento. Segue abaixo um exemplo do arquivo preenchido.
+
 *O valor da* ```SECRET_KEY``` *foi fornecido à equipe de desenvolvimento.*
 ```ini
 [settings]
@@ -124,3 +128,67 @@ o banco e criar um superuser:
 $ make init
 ```
 Será pedida uma senha para o superuser. Coloque a senha que desejar.
+
+## Comandos do Makefile
+
+Segue abaixo uma lista de comandos para facilitar o desenvolvimento.
+
+### Rodar configurações iniciais
+
+```shell
+$ make init
+```
+
+### Iniciar o servidor do Django
+
+```shell
+$ make serve
+```
+
+### Instalar os requisitos
+
+```shell
+$ make requirements
+```
+
+### Sincronizar o banco
+
+```shell
+$ make sync
+```
+
+### Criar e rodar as migrações
+Respectivamente:
+
+```shell
+$ make makemig
+$ make mig
+```
+
+### Coletar os arquivos estáticos
+
+```shell
+$ make static
+```
+
+### Iniciar uma spider
+
+```shell
+$ make crawl spider=nome_da_spider
+```
+
+### Iniciar e parar o Redis:
+Respectivamente:
+
+```shell
+$ make redis.start
+$ make redis.stop
+```
+
+### Iniciar o Celery e o Celery Beat
+Respectivamente:
+
+```shell
+$ make celery
+$ make celery.beat
+```

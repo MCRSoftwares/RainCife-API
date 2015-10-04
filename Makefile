@@ -17,7 +17,6 @@ sync:
 static:
 	@python manage.py collectstatic
 
-
 init: requirements makemig sync
 	$(info Creating superuser 'admin', please provide a password...)
 	@python manage.py createsuperuser --username admin --email dummy@raincife.admin
@@ -30,3 +29,9 @@ celery:
 
 celery.beat:
 	@python manage.py celerybeat --verbosity=2 --loglevel=DEBUG
+
+redis.start:
+	@sudo service redis_6379 start
+
+redis.stop:
+	@sudo service redis_6379 stop
