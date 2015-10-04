@@ -13,7 +13,7 @@ import sys
 import os
 
 sys.path.insert(0, '../raincife_rest')
-os.environ['DJANGO_SETTINGS_MODULE'] = 'raincife_rest.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 BOT_NAME = 'raincife_bot'
 

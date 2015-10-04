@@ -91,7 +91,6 @@ DATABASES = {
             BASE_DIR.child('local'), 'raincife.sqlite3'), cast=parse_db),
 }
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
