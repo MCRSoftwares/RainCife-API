@@ -7,13 +7,13 @@ from apac.models import APACMarker
 from apac.serializers import APACMarkerSerializer
 
 
-@include_view
+@include_view('apacmarkers_list')
 class APACMarkersListView(ListAPIView):
     queryset = APACMarker.objects.all()
     serializer_class = APACMarkerSerializer
 
 
-@include_view
+@include_view('apacmarker_retrieve')
 class APACMarkerRetrieveView(RetrieveAPIView):
     queryset = APACMarker.objects.all()
     serializer_class = APACMarkerSerializer

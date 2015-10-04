@@ -9,19 +9,19 @@ def _simplify(value):
     return '_'.join(findall('[A-Z]+[a-z]+|[a-z]+', value)).lower()
 
 
-def include_view(*args):
+def include_view(name=None):
 
-    def add_view_to_list(obj, *args):
+    def add_view_to_list(obj):
 
         module = modules[obj.__module__]
 
         if not hasattr(module, '__all__'):
             setattr(module, '__all__', [])
 
-        if not args:
+        if not name or not isinstance(name, basestring):
             view_name = _simplify(obj.__name__)
         else:
-            view_name = args[0]
+            view_name = name
 
         if view_name in module.__all__:
             raise Exception('Duplicated View name given: '
@@ -39,7 +39,7 @@ def include_view(*args):
         else:
             return obj
 
-    if args and not isinstance(args[0], basestring):
-        return add_view_to_list(*args)
+    if name and not isinstance(name, basestring):
+        return add_view_to_list(name)
 
     return add_view_to_list
