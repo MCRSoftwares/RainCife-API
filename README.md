@@ -2,7 +2,49 @@
 
 *Monitoramento de chuvas e alagamentos na palma da sua mão.* Este repositório
 contém somente a API do RainCife, para acessar o repositório da aplicação
-em si, clique [aqui](https://github.com/MCRSoftwares/RainCife-API)
+em si, clique [aqui](https://github.com/MCRSoftwares/RainCife-API).
+
+## Vagrant
+
+Caso esteja utilizando o [Vagrant](https://www.vagrantup.com/), basta executar os comandos abaixo:
+```shell
+$ git clone https://github.com/MCRSoftwares/RainCife-API.git
+$ cd RainCife-API
+$ vagrant up
+```
+
+Se ocorrer algum erro, execute:
+```shell
+$ vagrant provision
+```
+
+Caso os erros persistam, baixe esta [máquina virtual (*.box)]() e siga para o [próximo passo]().
+
+Para **acessar** a máquina virtual, execute:
+```shell
+$ vagrant ssh
+```
+
+Para **sair** da máquina virtual, basta executar:
+```shell
+$ logout
+```
+
+Para **desligar** a máquina virtual, execute:
+```shell
+$ vagrant halt
+```
+
+Para **destruir** a máquina virtual, execute:
+```shell
+$ vagrant destroy
+```
+
+Tendo o Vagrant configurado e rodando corretamente, pule os próximos passos até chegar em [Configurando o sistema](#configurando-o-sistema).
+
+## Vagrant - Instalando uma máquina existente
+
+
 
 ## Pré-Requisitos
 
