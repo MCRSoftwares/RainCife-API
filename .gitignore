@@ -68,3 +68,10 @@ staticfiles/
 # Decouple
 settings.ini
 !example.settings.ini
+
+# Celery
+*celery*
+!celery.py
+
+# Redis
+*dump*

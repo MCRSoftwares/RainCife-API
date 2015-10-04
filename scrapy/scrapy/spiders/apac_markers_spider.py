@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from scrapy.http import Request
-from raincife_bot.urls import pluviometro
+from scrapy.urls import pluviometro
 from .mixins import APACSpiderMixin
-from raincife_bot.items import MarkerItem
+from scrapy.items import MarkerItem
 import time
 
 

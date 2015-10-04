@@ -18,8 +18,9 @@ class TakeFirstPipeline(object):
 
 class SaveMarkerModelPipeline(object):
     def process_item(self, item, spider):
-        if isinstance(item, DjangoItem):
-            if not MarkerItem.django_model.objects.filter(
-                    apac_id=int(item['apac_id'])).exists():
+        if isinstance(item, DjangoItem) and isinstance(item, MarkerItem):
+            if 'apac_id' in item and item['apac_id'] and not \
+                    MarkerItem.django_model.objects.filter(
+                        apac_id=int(item['apac_id'])).exists():
                 return item.save()
         return item

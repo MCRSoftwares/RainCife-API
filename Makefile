@@ -3,7 +3,7 @@ serve:
 	@python manage.py runserver
 
 requirements:
-	@pip install -r ../requirements.txt
+	@pip install -r requirements.txt
 
 makemig:
 	@python manage.py makemigrations
@@ -23,4 +23,10 @@ init: requirements makemig sync
 	@python manage.py createsuperuser --username admin --email dummy@raincife.admin
 
 crawl:
-	@cd raincife_bot/ && scrapy crawl $(spider)
+	@cd scrapy/ && scrapy crawl $(spider)
+
+celery:
+	@python manage.py celery -A raincife worker -l info
+
+celery.beat:
+	@python manage.py celerybeat --verbosity=2 --loglevel=DEBUG

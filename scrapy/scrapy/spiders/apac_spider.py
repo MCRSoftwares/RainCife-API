@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from scrapy.http import FormRequest
-from raincife_bot.urls import pluviometro
+from scrapy.urls import pluviometro
 from .mixins import APACSpiderMixin
 
 

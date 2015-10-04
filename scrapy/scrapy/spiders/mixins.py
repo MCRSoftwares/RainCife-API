@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from raincife_bot.urls import pluviometro
+from scrapy.urls import pluviometro
 import scrapy
 
 
