@@ -74,4 +74,5 @@ settings.ini
 *dump*
 
 # Vagrant
-.vagrant
+.vagrant/*
+*.box
