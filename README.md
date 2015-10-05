@@ -302,3 +302,11 @@ $ make celery.beat.start
 $ make celery.beat.restart
 $ make celery.beat.stop
 ```
+
+### Supervisor: todos os serviços (Redis, Celery & Celery Beat)
+
+```shell
+$ make services.start
+$ make services.restart
+$ make services.stop
+```
