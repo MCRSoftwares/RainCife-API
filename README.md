@@ -25,6 +25,13 @@ Para **acessar** a máquina virtual, execute:
 $ vagrant ssh
 ```
 
+Dentro da máquina virtual, execute os seguintes comandos para instalar o servidor do redis e o scrapy (pressione ```ENTER``` sempre que algo for pedido):
+```shell
+$ cd raincife/
+$ make redis.install
+$ make scrapy.install
+```
+
 Para **sair** da máquina virtual, basta executar:
 ```shell
 $ logout
@@ -40,11 +47,9 @@ Para **destruir** a máquina virtual, execute:
 $ vagrant destroy
 ```
 
-Dentro da máquina virtual, execute os seguintes comandos para configurar o servidor do redis e o scrapy (pressione ```ENTER``` sempre que algo for pedido):
+Para **reiniciar** a máquina virtual, execute:
 ```shell
-$ cd raincife/
-$ make redis.install
-& make scrapy.install
+$ vagrant reload
 ```
 
 Caso for usar o PostgreSQL, crie um banco e uma senha para o usuário 'postgres' (essas configurações serão importantes na hora de definir o ```DATABASE_URL```):
