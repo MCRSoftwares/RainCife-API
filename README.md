@@ -18,7 +18,7 @@ Se ocorrer algum erro, execute:
 $ vagrant provision
 ```
 
-Caso os erros persistam, baixe esta [máquina virtual (raincife.box)]() e siga para o [próximo passo](#vagrant---instalando-uma-máquina-existente).
+Caso os erros persistam, baixe esta [máquina virtual (680.20 MB)](https://www.dropbox.com/s/g77vo1x4xruacns/raincife.box?dl=0) e siga para o [próximo passo](#vagrant---instalando-uma-máquina-existente).
 
 Para **acessar** a máquina virtual, execute:
 ```shell
@@ -40,13 +40,29 @@ Para **destruir** a máquina virtual, execute:
 $ vagrant destroy
 ```
 
-Dentro da máquina virtual, execute os seguintes comandos para configurar o servidor do redis (pressione ```ENTER``` sempre que algo for pedido):
+Dentro da máquina virtual, execute os seguintes comandos para configurar o servidor do redis e o scrapy (pressione ```ENTER``` sempre que algo for pedido):
 ```shell
 $ cd raincife/
 $ make redis.install
+& make scrapy.install
 ```
 
-Tendo o Vagrant configurado e rodando corretamente, pule os próximos passos até chegar em [Configurando o sistema](#configurando-o-sistema).
+Caso for usar o PostgreSQL, crie um banco e uma senha para o usuário 'postgres' (essas configurações serão importantes na hora de definir o ```DATABASE_URL```):
+```shell
+$ createdb raincife
+$ sudo su - postgres
+$ psql
+$ ALTER USER postgres PASSWORD 'senha';
+$ \q
+$ logout
+```
+
+Agora, basta criar uma virtualenv:
+```shell
+$ mkvirtualenv raincife
+```
+
+Tendo o Vagrant configurado e rodando corretamente, pule os próximos passos até chegar em [Configurando o sistema](#configurando).
 
 ## Vagrant - Instalando uma máquina existente
 
@@ -55,7 +71,7 @@ Após baixar o arquivo ```raicife.box```, cole-o na pasta do projeto, no mesmo n
 $ vagrant box add raincife raincife.box
 ```
 
-Após a execução do comando, apague o arquivo ```Vagrantfile```, e tenha certeza de que a máquina virtual anterior (caso tenha tentado criar uma) ainda não exista:
+Após a execução do comando, tenha certeza de que a máquina virtual anterior (caso tenha tentado criar uma) não exista mais, depois apague o arquivo ```Vagrantfile```:
 ```shell
 $ vagrant destroy
 $ rm Vagrantfile
@@ -68,6 +84,7 @@ $ vagrant ssh
 ```
 
 Outros comandos do vagrant podem ser encontrado [acima](#vagrant).
+Tendo o Vagrant configurado e rodando corretamente, pule os próximos passos até chegar em [Configurando o sistema](#configurando).
 
 ## Pré-Requisitos
 
@@ -99,6 +116,7 @@ $ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 627220E7
 $ echo 'deb http://archive.scrapy.org/ubuntu scrapy main' | sudo tee /etc/apt/sources.list.d/scrapy.list
 $ sudo apt-get update
 $ sudo apt-get install scrapy
+$ sudo pip install scrapy
 ```
 
 ### Redis
@@ -116,7 +134,7 @@ $ sudo ./install_server.sh
 
 ### PostgreSQL
 
-ESte passo é opcional, mas caso não o siga, recomenda-se que remova a última linha do arquivo ```requirements.txt```, referente à dependencia do ```psycopg2```.
+Este passo é opcional, mas caso não o siga, recomenda-se que remova a última linha do arquivo ```requirements.txt```, referente à dependencia do ```psycopg2```.
 
 Instale os pacotes do Postgres:
 ```shell
@@ -132,7 +150,7 @@ Crie uma senha para o usuário 'postgres':
 ```shell
 $ sudo su - postgres
 $ psql
-$ ALTER USER postgres PASSWORD 'newpassword';
+$ ALTER USER postgres PASSWORD 'senha';
 $ \q
 $ logout
 ```
@@ -154,9 +172,9 @@ $ git clone https://github.com/MCRSoftwares/RainCife-API.git
 
 ### Configurando
 
-Uma vez clonado, entre na pasta do repositório:
+Uma vez clonado, entre na pasta do repositório (considerando que a **virtualenv** já está ativada):
 ```shell
-$ cd RainCife-API/
+$ cd RainCife-API/ (ou 'cd raincife/', se estiver usando o Vagrant)
 ```
 
 Crie e Configure o arquivo ```settings.ini```. Baseie-se no arquivo
