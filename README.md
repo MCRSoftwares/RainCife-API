@@ -6,7 +6,7 @@ em si, clique [aqui](https://github.com/MCRSoftwares/RainCife-API).
 
 ## Vagrant
 Se não for utilizar o Vagrant, continue [aqui](#pré-requisitos).
-Caso esteja utilizando o [Vagrant](https://www.vagrantup.com/), basta executar os comandos abaixo (levará aproximadamente 20-30 minutos para configurar a máquina por completo):
+Caso esteja utilizando o [Vagrant](https://www.vagrantup.com/), basta executar os comandos abaixo (levará aproximadamente 10-20 minutos para configurar a máquina por completo):
 ```shell
 $ git clone https://github.com/MCRSoftwares/RainCife-API.git
 $ cd RainCife-API
