@@ -270,11 +270,12 @@ $ make static
 $ make crawl spider=nome_da_spider
 ```
 
-### Iniciar e parar o Redis
+### Iniciar, reiniciar e parar o Redis
 Respectivamente:
 
 ```shell
 $ make redis.start
+$ make redis.restart
 $ make redis.stop
 ```
 
@@ -284,4 +285,20 @@ Respectivamente:
 ```shell
 $ make celery
 $ make celery.beat
+```
+
+### Supervisor: Celery 
+
+```shell
+$ make celery.start
+$ make celery.restart
+$ make celery.stop
+```
+
+### Supervisor: Celery Beat 
+
+```shell
+$ make celery.beat.start
+$ make celery.beat.restart
+$ make celery.beat.stop
 ```
