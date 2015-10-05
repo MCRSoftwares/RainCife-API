@@ -1,0 +1,87 @@
+---
+- hosts: all
+  sudo: true
+  tasks:
+    - name: install pt_BR locale
+      shell: locale-gen pt_BR.UTF-8
+
+    - name: update apt cache
+      apt: update_cache=yes
+
+    - name: install postgresql
+      apt: name=postgresql state=latest
+
+    - name: install postgresql-contrib
+      apt: name=postgresql-contrib state=latest
+
+    - name: install postgresql-server-dev-9.3
+      apt: name=postgresql-server-dev-9.3 state=latest
+
+    - name: install libpq-dev
+      apt: name=libpq-dev state=latest
+
+    - name: install libffi-dev
+      apt: name=libffi-dev state=latest
+
+    - name: install libssl-dev
+      apt: name=libssl-dev state=latest
+
+    - name: install libxml2-dev
+      apt: name=libxml2-dev state=latest
+
+    - name: install libxslt1-dev
+      apt: name=libxslt1-dev state=latest
+
+    - name: install python-psycopg2
+      apt: name=python-psycopg2 state=latest
+
+    - name: install python-pip
+      apt: name=python-pip state=latest
+
+    - name: install python-dev for py2
+      apt: name=python-dev state=latest
+
+    - name: install git
+      apt: name=git state=latest
+
+    - name: upgrade packages
+      apt: upgrade=yes state=latest
+
+    - name: install virtualenv
+      pip: name=virtualenv
+
+    - name: install virtualenvwrapper
+      pip: name=virtualenvwrapper
+
+    - name: config WORKON_HOME
+      shell: export WORKON_HOME=~/.virtualenvs
+
+    - name: config venv
+      shell: echo '. /usr/local/bin/virtualenvwrapper.sh' >> /home/vagrant/.bashrc
+
+    - name: create vagrant postgres' user
+      sudo_user: postgres
+      postgresql_user: name=vagrant password=vagrant state=present role_attr_flags=CREATEDB,NOSUPERUSER
+
+    - name: create vagrant postgres' database
+      sudo_user: postgres
+      postgresql_db: name=vagrant owner=vagrant
+
+    - name: give database privileges to vagrant user
+      sudo_user: postgres
+      postgresql_user: user=vagrant db=vagrant priv=ALL
+
+    - name: create /home/vagrant/.redis directory
+      file: path=/home/vagrant/.redis state=directory owner=vagrant
+
+    - name: download redis
+      shell: chdir=/home/vagrant/.redis/ wget http://download.redis.io/releases/redis-3.0.4.tar.gz && tar xzf redis-3.0.4.tar.gz
+
+    - name: install redis
+      shell: chdir=/home/vagrant/.redis/redis-3.0.4/ make && make install
+
+    - name: download scrapy
+      shell: sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 627220E7 && echo 'deb http://archive.scrapy.org/ubuntu scrapy main' | sudo tee /etc/apt/sources.list.d/scrapy.list && sudo apt-get update
+
+    - name: install scrapy
+      apt: name=scrapy state=latest
