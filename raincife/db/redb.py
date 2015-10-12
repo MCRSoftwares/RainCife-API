@@ -36,6 +36,17 @@ class ReQL(object):
         item = yield query.run(c)
         raise gen.Return(item)
 
+    @gen.coroutine
+    def unique_only(self, table, data, index):
+        c = yield self.connection
+        items = []
+        for row in data:
+            is_unique = yield r.table(table).get_all(
+                row[index], index=index).is_empty().run(c)
+            if is_unique:
+                items.append(row)
+        raise gen.Return(items)
+
 
 def initdb():
     r.set_loop_type("tornado")

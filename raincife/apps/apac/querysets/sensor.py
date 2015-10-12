@@ -19,6 +19,7 @@ def count():
 
 @gen.coroutine
 def insert(data):
+    data['data'] = yield q.unique_only('sensor', data['data'], 'id_apac')
     results = yield q.single(r.table('sensor').insert(data['data']))
     raise gen.Return(results)
 

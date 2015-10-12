@@ -22,10 +22,16 @@ def _close_redb_connection(connection):
 def create_tables():
     connection = _create_redb_connection()
     manager.add('user', 'token', 'sensor')
+    manager.set_indexes({
+        'user': ['username'],
+        'token': ['user'],
+        'sensor': ['id_apac']
+    })
     for table in manager.all():
         try:
             print l['create_table'].format(table)
             r.table_create(table).run(connection)
+            r.table(table).index_create(manager.get_index(table, 0))
             print l['value_done'].format(table)
         except r.RqlRuntimeError:
             print l['table_exists'].format(table)
