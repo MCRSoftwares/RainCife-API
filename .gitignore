@@ -56,7 +56,13 @@ docs/_build/
 # PyBuilder
 target/
 
-# Django
-*.log
-**/migrations/**
-!**/migrations/__init__.py
+# Decouple
+settings.ini
+!example.settings.ini
+
+# Vagrant
+.vagrant/*
+*.box
+
+# RethinkDB
+**/rethinkdb_data/**
