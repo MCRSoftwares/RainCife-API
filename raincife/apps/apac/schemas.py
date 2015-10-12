@@ -13,10 +13,5 @@ class SensorSchema(Schema):
         'longitude': {'type': basestring, 'required': True},
     }
 
-    def validate_id_apac(self, field, value):
-        if int(value) < 1000:
-            return False
-        return True
-
 
 Sensor = SensorSchema()
