@@ -6,7 +6,6 @@ from raincife.routers import routers
 from decouple import config
 from jsonado.core.utils import TableFinder
 from jsonado.core.utils import Commands
-import sys
 
 
 class RaincifeCommands(Commands):
@@ -21,4 +20,4 @@ class RaincifeCommands(Commands):
         IOLoop.current().start()
 
 
-RaincifeCommands(*sys.argv)
+RaincifeCommands()
