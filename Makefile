@@ -7,4 +7,10 @@ requirements:
 	@pip install -r requirements.txt
 
 serve:
-	@python start.py serve
+	@python manage.py serve
+
+debug:
+	@python manage.py debug
+
+sync:
+	@python manage.py sync
