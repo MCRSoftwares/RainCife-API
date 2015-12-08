@@ -2,6 +2,9 @@
 
 from tornado.web import Application
 from tornado.ioloop import IOLoop
+from tornado.httpserver import HTTPServer
+from tornado import netutil
+from tornado import process
 from raincife.routers import routers
 from decouple import config
 from jsonado.core.utils import TableFinder
@@ -11,13 +14,26 @@ import rethinkdb as r
 
 class RaincifeCommands(Commands):
 
+    def cmd_debug(self, *args):
+        app = Application(routers, debug=True, autoreload=False)
+        if len(args) > 0:
+            port = int(args[0])
+        else:
+            port = config('PORT', default=8888, cast=int)
+        app.listen(port)
+        r.set_loop_type('tornado')
+        IOLoop.current().start()
+
     def cmd_serve(self, *args):
         app = Application(routers)
         if len(args) > 0:
             port = int(args[0])
         else:
             port = config('PORT', default=8888, cast=int)
-        app.listen(port)
+        sockets = netutil.bind_sockets(port)
+        process.fork_processes(0)
+        server = HTTPServer(app)
+        server.add_sockets(sockets)
         r.set_loop_type('tornado')
         IOLoop.current().start()
 
