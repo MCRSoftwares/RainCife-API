@@ -9,6 +9,7 @@ from raincife.routers import routers
 from decouple import config
 from jsonado.core.utils import TableFinder
 from jsonado.core.utils import Commands
+from raincife.db.connections import MainConnection
 import rethinkdb as r
 
 
@@ -31,7 +32,7 @@ class RaincifeCommands(Commands):
         else:
             port = config('PORT', default=8888, cast=int)
         sockets = netutil.bind_sockets(port)
-        process.fork_processes(0)
+        process.fork_processes(config('FORK_PROCESSES', default=0, cast=int))
         server = HTTPServer(app)
         server.add_sockets(sockets)
         r.set_loop_type('tornado')
@@ -39,10 +40,7 @@ class RaincifeCommands(Commands):
 
     def cmd_sync(self, *args):
         tables = TableFinder().find('raincife/apps/')
-        c = r.connect(
-            port=config('DB_PORT', default=28015, cast=int),
-            host=config('DB_HOST', default='localhost')
-        )
+        c = MainConnection().get()
         for obj in tables:
             r.db_list().contains(obj.db).do(
                 lambda db_exists: r.branch(
@@ -50,11 +48,12 @@ class RaincifeCommands(Commands):
                     {'created': 0},
                     r.db_create(obj.db))
             ).run(c)
-            r.db(obj.db).table_list().contains(obj.table).do(
+            redb = r.db(obj.db)
+            redb.table_list().contains(obj.table).do(
                 lambda table_exists: r.branch(
                     table_exists,
                     {'created': 0},
-                    r.db(obj.db).table_create(obj.table))
+                    redb.table_create(obj.table))
             ).run(c)
 
 
