@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
-routers = [
-    ('/api/v1/', None),
-]
+from users.routers import routers as user_routers
+
+routers = []
+routers += user_routers
