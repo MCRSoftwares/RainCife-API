@@ -10,33 +10,48 @@ from decouple import config
 from jsonado.core.utils import ClassFinder
 from jsonado.core.utils import Commands
 from raincife.db.connections import MainConnection
+from raincife.logs import ServerLog
 import rethinkdb as r
 
 
 class RaincifeCommands(Commands):
 
     def cmd_debug(self, *args):
+        port = int(args[0]) if args else config('PORT', default=8888, cast=int)
+        ServerLog.info(code='dev_server_starting', args=[port])
         app = Application(routers, debug=True, autoreload=False)
-        if len(args) > 0:
-            port = int(args[0])
-        else:
-            port = config('PORT', default=8888, cast=int)
         app.listen(port)
         r.set_loop_type('tornado')
-        IOLoop.current().start()
+        ioloop = IOLoop.current()
+        ioloop.add_callback(
+            callback=ServerLog.info,
+            code='server_started',
+            args=[
+                config('HOST', default='localhost'),
+                config('PORT', default=8888, cast=int)
+            ]
+        )
+        ioloop.start()
 
     def cmd_serve(self, *args):
+        port = int(args[0]) if args else config('PORT', default=8888, cast=int)
+        ServerLog.info(code='dev_server_starting', args=[port])
         app = Application(routers)
-        if len(args) > 0:
-            port = int(args[0])
-        else:
-            port = config('PORT', default=8888, cast=int)
         sockets = netutil.bind_sockets(port)
         process.fork_processes(config('FORK_PROCESSES', default=0, cast=int))
         server = HTTPServer(app)
         server.add_sockets(sockets)
         r.set_loop_type('tornado')
-        IOLoop.current().start()
+        ioloop = IOLoop.current()
+        ioloop.add_callback(
+            callback=ServerLog.info,
+            code='server_started',
+            args=[
+                config('HOST', default='localhost'),
+                config('PORT', default=8888, cast=int)
+            ]
+        )
+        ioloop.start()
 
     def cmd_sync(self, *args):
         tables = ClassFinder(
