@@ -7,7 +7,7 @@ from tornado import netutil
 from tornado import process
 from raincife.routers import routers
 from decouple import config
-from jsonado.core.utils import TableFinder
+from jsonado.core.utils import ClassFinder
 from jsonado.core.utils import Commands
 from raincife.db.connections import MainConnection
 import rethinkdb as r
@@ -39,7 +39,8 @@ class RaincifeCommands(Commands):
         IOLoop.current().start()
 
     def cmd_sync(self, *args):
-        tables = TableFinder().find('raincife/apps/')
+        tables = ClassFinder(
+            'jsonado.db.tables', 'Table').find('raincife/apps/')
         c = MainConnection().get()
         for obj in tables:
             r.db_list().contains(obj.db).do(
