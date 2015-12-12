@@ -4,4 +4,4 @@ rethinkdb==2.2.0.post1
 tornado==4.2.1
 pip==7.1.2
 python-decouple==3.0
--e git+git@github.com:victorfsf/jsonado.git@feature/JND003#egg=jsonado
+-e git+git@github.com:victorfsf/jsonado.git@develop#egg=jsonado

@@ -17,5 +17,5 @@ class UserListHandler(ReDBHandler):
         if 'fields' in arguments:
             fields = self.get_param('fields').split(',')
             result = self.documents.fields(*fields).filter(arguments)
-            raise gen.Return((yield self.query(result)))
-        raise gen.Return((yield self.query(self.table.filter(arguments))))
+            raise gen.Return((yield result.run()))
+        raise gen.Return((yield self.documents.filter(arguments).run()))
