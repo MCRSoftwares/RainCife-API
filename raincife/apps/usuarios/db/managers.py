@@ -3,16 +3,16 @@
 from jsonado.db import tables
 
 
-class UserReQL(tables.ReQL):
+class UsuarioReQL(tables.ReQL):
 
     def fields(self, *args):
         return self.pluck(*args)
 
 
-class UserManager(tables.Manager):
+class UsuarioManager(tables.Manager):
 
     def get_reql(self):
-        return UserReQL(db=self)
+        return UsuarioReQL(db=self)
 
     @tables.reql
     def fields(self, *args):

@@ -2,11 +2,11 @@
 
 from jsonado.db import tables
 from raincife.db.connections import MainConnection
-from users.db.managers import UserManager
+from marcadores.db.managers import MarcadorManager
 
 
-class User(tables.Table):
-    table = 'user'
+class Marcador(tables.Table):
+    table = 'marcador'
     db = 'raincife'
     connection = MainConnection
-    documents = UserManager
+    documents = MarcadorManager
