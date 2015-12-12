@@ -1,0 +1,7 @@
+ipdb==0.8.1
+ipython==4.0.0
+rethinkdb==2.2.0.post1
+tornado==4.2.1
+pip==7.1.2
+python-decouple==3.0
+-e git+git@github.com:victorfsf/jsonado.git@develop#egg=jsonado

@@ -56,7 +56,9 @@ docs/_build/
 # PyBuilder
 target/
 
-# Django
-*.log
-**/migrations/**
-!**/migrations/__init__.py
+# RethinkDB
+rethinkdb_data/
+
+# Local
+settings.ini
+temp/
