@@ -7,11 +7,11 @@ import rethinkdb as r
 
 class MarcadorReQL(tables.ReQL):
 
-    def new_marcador(self, usuario_id, *args):
+    def new_marcador(self, usuario_id, **kwargs):
         return Usuario.documents().get(usuario_id).raw().do(
             self.documents.insert({
                 'usuario_id': r.row['id'],
-            }).raw()
+            }.update(**kwargs)).raw()
         )
 
 
@@ -21,5 +21,5 @@ class MarcadorManager(tables.Manager):
         return MarcadorReQL(db=self)
 
     @tables.reql
-    def new_marcador(self, usuario_id, *args):
-        return self.get_reql().new_marcador(usuario_id, *args)
+    def new_marcador(self, usuario_id, **kwargs):
+        return self.get_reql().new_marcador(usuario_id, **kwargs)

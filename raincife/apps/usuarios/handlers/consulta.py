@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from jsonado.handlers.generic import ReDBHandler
-from users.db.tables import Usuario
+from usuarios.db.tables import Usuario
 from tornado import gen
 
 

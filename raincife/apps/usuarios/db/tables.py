@@ -2,7 +2,7 @@
 
 from jsonado.db import tables
 from raincife.db.connections import MainConnection
-from users.db.managers import UsuarioManager
+from usuarios.db.managers import UsuarioManager
 
 
 class Usuario(tables.Table):

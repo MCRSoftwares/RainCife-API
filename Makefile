@@ -14,3 +14,6 @@ debug:
 
 sync:
 	@python manage.py sync
+
+shell:
+	@ipython

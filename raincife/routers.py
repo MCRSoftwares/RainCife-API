@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from users.routers import routers as user_routers
+from usuarios.routers import routers as usuario_routers
 
 routers = []
-routers += user_routers
+routers += usuario_routers
