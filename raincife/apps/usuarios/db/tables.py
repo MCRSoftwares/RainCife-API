@@ -6,10 +6,14 @@ from usuarios.db.managers import UsuarioManager
 
 
 class Usuario(tables.Table):
+    """
+    Classe que referencia a tabela 'usuario' no banco 'raincife'.
+    """
     table = 'usuario'
     db = 'raincife'
     connection = MainConnection
     documents = UsuarioManager
     indexes = {
-        'usuario': lambda row: row['usuario']
+        'usuario': lambda row: row['usuario'],
+        'email': lambda row: row['email']
     }
