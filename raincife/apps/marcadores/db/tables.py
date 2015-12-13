@@ -10,3 +10,6 @@ class Marcador(tables.Table):
     db = 'raincife'
     connection = MainConnection
     documents = MarcadorManager
+    indexes = {
+        'usuario_id': lambda row: row['usuario_id']
+    }
