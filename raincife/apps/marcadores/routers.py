@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from marcadores.handlers import MarcadorListHandler
 
-default_url = '/api/v1/marcadores{}'
+
+base_router = '/api/v1/marcadores{}'
 
 routers = [
-    # (default_url.format('/'), MarcadorListHandler),
+    (base_router.format('/'), MarcadorListHandler),
 ]
