@@ -27,3 +27,23 @@ class AuthError(BaseError):
         e o usuário não é fornecido junto ao dado.
         """
         return u'O ID do usuário não foi fornecido.'
+
+
+class ValidationError(BaseError):
+    """
+    Exceção com mensagens para tratar erros de validação de dados.
+    """
+    def message_invalid_field(self, *args):
+        """
+        Exceção é lançada quando a aplicação recebe algum dado via POST
+        cujo campo não está entre os campos válidos.
+        """
+        return u'Campo inválido fornecido: "{}" com valor "{}".'.format(*args)
+
+    def message_invalid_type_for_field(self, *args):
+        """
+        Exceção é lançada quando a aplicação recebe algum dado via POST
+        cujo campo está no formato inválido.
+        """
+        return (u'Esperava um valor do tipo "str" para o campo "{}", '
+                u'não "{}".'.format(*args))

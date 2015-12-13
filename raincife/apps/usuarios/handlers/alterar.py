@@ -47,6 +47,6 @@ class UsuarioUpdateHandler(ReDBHandler):
             # Se o token fornecido for diferente do token presente no banco
             raise AuthError(code='invalid_token')
         # Senão, a alteração é aceita e executada.
-        update = (yield self.docs.get(usuario_id).update(data).run())
+        response = (yield self.docs.get(usuario_id).update(data).run())
         # Retorna a resposta do banco.
-        raise gen.Return(update)
+        raise gen.Return(response)
