@@ -6,8 +6,10 @@ from usuarios.handlers import UsuarioCreateHandler
 from usuarios.handlers import UsuarioUpdateHandler
 
 
+default_url = '/api/v1/usuarios{}'
+
 routers = [
-    ('/api/v1/usuarios/', UsuarioListHandler),
-    ('/api/v1/usuarios/alterar/', UsuarioUpdateHandler),
-    ('/api/v1/usuarios/criar/', UsuarioCreateHandler),
+    (default_url.format('/'), UsuarioListHandler),
+    (default_url.format('/alterar/'), UsuarioUpdateHandler),
+    (default_url.format('/criar/'), UsuarioCreateHandler),
 ]
