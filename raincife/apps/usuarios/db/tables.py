@@ -14,5 +14,6 @@ class Usuario(tables.Table):
     connection = MainConnection
     documents = UsuarioManager
     indexes = {
-        'usuario': lambda row: row['usuario']
+        'usuario': lambda row: row['usuario'],
+        'email': lambda row: row['email']
     }

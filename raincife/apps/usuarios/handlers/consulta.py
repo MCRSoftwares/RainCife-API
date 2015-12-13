@@ -25,8 +25,9 @@ class UsuarioListHandler(ReDBHandler):
         Método assíncrono responsável por tratar as
         query strings recebidas pela URL.
         """
+        result = self.docs.without('senha')
         if 'fields' in arguments:
             fields = self.get_param('fields')
-            result = self.docs.filter(arguments).fields(*fields)
+            result = result.filter(arguments).fields(*fields)
             raise gen.Return((yield result.run()))
-        raise gen.Return((yield self.docs.filter(arguments).run()))
+        raise gen.Return((yield result.filter(arguments).run()))
