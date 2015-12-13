@@ -6,6 +6,9 @@ from marcadores.db.managers import MarcadorManager
 
 
 class Marcador(tables.Table):
+    """
+    Classe que referencia a tabela 'marcador' no banco 'raincife'.
+    """
     table = 'marcador'
     db = 'raincife'
     connection = MainConnection
