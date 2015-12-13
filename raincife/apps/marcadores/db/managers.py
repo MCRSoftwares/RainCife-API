@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from jsonado.db import tables
-from usuarios.db.tables import Usuario
+from jsonado.core.utils import get_module
 import rethinkdb as r
 
 
 class MarcadorReQL(tables.ReQL):
 
     def new_marcador(self, usuario_id, **kwargs):
-        return Usuario.documents().get(usuario_id).raw().do(
-            self.documents.insert({
+        Usuario = get_module('usuarios.db.tables', 'Usuario')
+        return Usuario.docs.get(usuario_id).raw().do(
+            self.docs.insert({
                 'usuario_id': r.row['id'],
             }.update(**kwargs)).raw()
         )
