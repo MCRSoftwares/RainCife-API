@@ -12,5 +12,5 @@ class UsuarioCreateHandler(ReDBHandler):
     @gen.coroutine
     def post(self):
         data = json.loads(self.request.body)
-        response = (yield self.documents.insert(data).run())
+        response = (yield self.docs.insert(data).run())
         self.write(response)
