@@ -18,6 +18,6 @@ sync:
 shell:
 	@ipython --profile=raincife
 
-setup:
+setup: clean requirements sync
 	@ipython profile create raincife
 	@IPYTHON=$$(ipython locate profile raincife); echo 'import raincife.apps' >> $$IPYTHON/startup/00_imports.py
