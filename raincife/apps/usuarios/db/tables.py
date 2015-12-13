@@ -10,3 +10,6 @@ class Usuario(tables.Table):
     db = 'raincife'
     connection = MainConnection
     documents = UsuarioManager
+    indexes = {
+        'usuario': lambda row: row['usuario']
+    }
