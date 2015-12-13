@@ -16,6 +16,6 @@ class UsuarioListHandler(ReDBHandler):
     def get_url_query(self, arguments):
         if 'fields' in arguments:
             fields = self.get_param('fields')
-            result = self.docs.fields(*fields).filter(arguments)
+            result = self.docs.filter(arguments).fields(*fields)
             raise gen.Return((yield result.run()))
         raise gen.Return((yield self.docs.filter(arguments).run()))
