@@ -71,6 +71,7 @@ class UsuarioCreateHandler(ReDBHandler):
                     }
                 ]
             }
+            self.set_status(400)
         elif email_exists:
             response = {
                 'data': [
@@ -79,6 +80,7 @@ class UsuarioCreateHandler(ReDBHandler):
                     }
                 ]
             }
+            self.set_status(400)
         else:
             # Executa a inserção do usuário.
             db_response = (yield self.docs.insert(data).run())
