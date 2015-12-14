@@ -63,25 +63,25 @@ class UsuarioCreateHandler(ReDBHandler):
         email_exists = (yield self.docs.get_all(
             data['email'], index='email').coerce_to('array').run())
 
+        response = {'data': [{}], 'status': 201}
         if usuario_exists:
-            response = {
-                'data': [
-                    {
-                        'usuario': u'Esse nome de usuário já existe!',
-                    }
-                ]
-            }
-            self.set_status(400)
-        elif email_exists:
-            response = {
-                'data': [
-                    {
-                        'email': u'Esse email já está cadastrado!',
-                    }
-                ]
-            }
-            self.set_status(400)
-        else:
+            response['data'][0].update(
+                {
+                    'usuario': u'Esse nome de usuário já existe!'
+                }
+            )
+            response['status'] = 409
+        if email_exists:
+            response['data'][0].update(
+                {
+                    'email': u'Esse email já está cadastrado!',
+                }
+            )
+            response['status'] = 409
+
+        self.set_status(response['status'])
+
+        if not usuario_exists and not email_exists:
             # Executa a inserção do usuário.
             db_response = (yield self.docs.insert(data).run())
             response = {
@@ -95,7 +95,8 @@ class UsuarioCreateHandler(ReDBHandler):
                         'nome': data['nome'],
                         'response': db_response
                     }
-                ]
+                ],
+                'status': 201
             }
             Token.docs.new_token(usuario=data['usuario'])
         raise gen.Return(response)
