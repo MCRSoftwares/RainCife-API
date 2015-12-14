@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from jsonado.db import tables
+from core.mixins import RaincifeTable
 from raincife.db.connections import MainConnection
 from marcadores.db.managers import MarcadorManager
 
 
-class Marcador(tables.Table):
+class Marcador(RaincifeTable):
     """
     Classe que referencia a tabela 'marcador' no banco 'raincife'.
     """
     table = 'marcador'
-    db = 'raincife'
     connection = MainConnection
     documents = MarcadorManager
     indexes = {
