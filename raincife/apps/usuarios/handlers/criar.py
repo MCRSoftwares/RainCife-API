@@ -2,12 +2,11 @@
 
 from jsonado.handlers.generic import ReDBHandler
 from core.exceptions import ValidationError
+from core.utils import gen_pw
 from usuarios.db.tables import Usuario
 from tokens.db.tables import Token
-from decouple import config
 from tornado import gen
 import json
-import bcrypt
 
 
 class UsuarioCreateHandler(ReDBHandler):
@@ -53,9 +52,7 @@ class UsuarioCreateHandler(ReDBHandler):
                     self.post_fields[field], field, type(value)])
 
         # Criptografa a senha antes de salvá-la no banco.
-        data['senha'] = bcrypt.hashpw(
-            data['senha'].encode('utf-8'), bcrypt.gensalt(
-                config('HASH_COMPLEXITY', default=10, cast=int)))
+        data['senha'] = gen_pw(data['senha'])
 
         usuario_exists = (yield self.docs.get_all(
             data['usuario'], index='usuario').coerce_to('array').run())

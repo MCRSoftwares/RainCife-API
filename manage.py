@@ -28,7 +28,8 @@ class RaincifeCommands(Commands):
         """
         port = int(args[0]) if args else self.port
         ServerLog.info(code='dev_server_starting', args=[port])
-        app = Application(routers, debug=True, autoreload=False)
+        app = Application(routers, debug=True, autoreload=False,
+                          cookie_secret=config('SECRET_KEY'))
         app.listen(port)
         r.set_loop_type('tornado')
         ioloop = IOLoop.current()
@@ -45,7 +46,7 @@ class RaincifeCommands(Commands):
         """
         port = int(args[0]) if args else self.port
         ServerLog.info(code='dev_server_starting', args=[port])
-        app = Application(routers)
+        app = Application(routers, cookie_secret=config('SECRET_KEY'))
         sockets = netutil.bind_sockets(port)
         process.fork_processes(self.fork_processes)
         server = HTTPServer(app)

@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 
+from core.mixins import URLQueryMixin
 from jsonado.handlers.generic import ReDBHandler
 from usuarios.db.tables import Usuario
 from tornado import gen
+from core.utils import is_email
+from core.utils import check_pw
+from core.enums import USER_AUTH_COOKIE
+import json
 
 
-class UsuarioListHandler(ReDBHandler):
+class UsuarioListHandler(URLQueryMixin):
     """
     Handler responsável pela listagem de usuários existentes no banco.
     """
@@ -19,15 +24,61 @@ class UsuarioListHandler(ReDBHandler):
         """
         self.write({'data': (yield self.url_query)})
 
+
+class UsuarioLoginHandler(ReDBHandler):
+    table = Usuario
+
     @gen.coroutine
-    def get_url_query(self, arguments):
-        """
-        Método assíncrono responsável por tratar as
-        query strings recebidas pela URL.
-        """
-        result = self.docs.without('senha')
-        if 'fields' in arguments:
-            fields = self.get_param('fields')
-            result = result.filter(arguments).fields(*fields)
-            raise gen.Return((yield result.run()))
-        raise gen.Return((yield result.filter(arguments).run()))
+    def post(self):
+        data = (self.request.arguments if self.request.arguments
+                else json.loads(self.request.body))
+        response = (yield self.authenticate(data))
+        self.write(response)
+
+    @gen.coroutine
+    def authenticate(self, data):
+        if not self.get_secure_cookie(USER_AUTH_COOKIE):
+            login = data.pop('login', None)
+            senha = data.pop('senha', None)
+            table_index = 'email' if is_email(login) else 'usuario'
+            usuario_query = self.docs.get_all(login, index=table_index)
+            usuario = (yield usuario_query.pluck('id', 'senha').run())
+
+            response = {
+                'data': [
+                    {
+                        'login': 'Usuário/Email ou Senha inválidos!'
+                    }
+                ],
+                'status': 401
+            }
+
+            if not usuario:
+                self.set_status(401)
+                raise gen.Return(response)
+            usuario = usuario.pop(0)
+            if check_pw(senha, usuario['senha']):
+                self.set_secure_cookie(USER_AUTH_COOKIE, usuario['id'])
+                response = {
+                    'data': [
+                        {
+                            'usuario': usuario['id']
+                        }
+                    ],
+                    'status': 201
+                }
+                raise gen.Return(response)
+
+            self.set_status(401)
+            raise gen.Return(response)
+
+        response = {
+            'data': [
+                {
+                    'login': 'Você já está logado!'
+                }
+            ],
+            'status': 401
+        }
+        self.set_status(401)
+        raise gen.Return(response)
