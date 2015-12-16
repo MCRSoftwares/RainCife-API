@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from jsonado.db import tables
-from jsonado.core.utils import get_module
 from datetime import datetime
 import rethinkdb as r
 import bcrypt
@@ -19,19 +18,16 @@ class TokenReQL(tables.ReQL):
         """
         return self.filter({'usuario_id': usuario_id})
 
-    def new_token(self, usuario):
+    def new_token(self, usuario_id):
         """
         Método que gera e salva um token para o usuário fornecido.
         """
-        Usuario = get_module('usuarios.db.tables', 'Usuario')
-        Usuario.docs.raw().get_all(usuario, index='usuario').do(
-            self.insert({
-                'usuario_id': r.row['id'],
-                'token': bcrypt.hashpw(
-                    hashlib.sha256().hexdigest(), bcrypt.gensalt()),
-                'criado_em': r.expr(datetime.now(r.make_timezone('-07:00')))
-            })
-        )
+        return self.insert({
+            'usuario_id': usuario_id,
+            'token': bcrypt.hashpw(
+                hashlib.sha256().hexdigest(), bcrypt.gensalt()),
+            'criado_em': r.expr(datetime.now(r.make_timezone('-07:00')))
+        })
 
 
 class TokenManager(tables.Manager):
@@ -50,8 +46,8 @@ class TokenManager(tables.Manager):
         return self.get_reql().usuario(usuario_id)
 
     @tables.reql
-    def new_token(self, usuario):
+    def new_token(self, usuario_id):
         """
         Método que executa um método com mesmo nome, definido na ReQL.
         """
-        return self.get_reql().new_token(usuario)
+        return self.get_reql().new_token(usuario_id)

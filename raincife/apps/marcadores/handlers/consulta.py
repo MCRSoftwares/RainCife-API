@@ -3,6 +3,7 @@
 from core.mixins import URLQueryMixin
 from marcadores.db.tables import Marcador
 from tornado import gen
+from tornado.web import authenticated
 
 
 class MarcadorListHandler(URLQueryMixin):
@@ -11,6 +12,7 @@ class MarcadorListHandler(URLQueryMixin):
     """
     table = Marcador
 
+    @authenticated
     @gen.coroutine
     def get(self):
         """

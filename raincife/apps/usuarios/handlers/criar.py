@@ -3,6 +3,7 @@
 from jsonado.handlers.generic import ReDBHandler
 from core.exceptions import ValidationError
 from core.utils import gen_pw
+from core.enums import USER_AUTH_COOKIE
 from usuarios.db.tables import Usuario
 from tokens.db.tables import Token
 from tornado import gen
@@ -17,7 +18,6 @@ class UsuarioCreateHandler(ReDBHandler):
     post_fields = {
         'usuario': basestring,
         'senha': basestring,
-        'nome': basestring,
         'email': basestring
     }
 
@@ -89,11 +89,13 @@ class UsuarioCreateHandler(ReDBHandler):
                             index='usuario').pluck('id').run())[0]['id'],
                         'usuario': data['usuario'],
                         'email': data['email'],
-                        'nome': data['nome'],
                         'response': db_response
                     }
                 ],
                 'status': 201
             }
-            Token.docs.new_token(usuario=data['usuario'])
+            (yield Token.docs.new_token(
+                usuario_id=db_response['generated_keys'][0]).run())
+            self.set_secure_cookie(
+                USER_AUTH_COOKIE, db_response['generated_keys'][0])
         raise gen.Return(response)

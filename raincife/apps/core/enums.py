@@ -3,4 +3,4 @@
 from decouple import config
 
 
-USER_AUTH_COOKIE = config('USER_AUTH_COOKIE', default='authuser', cast=str)
+USER_AUTH_COOKIE = config('USER_AUTH_COOKIE', default='user', cast=str)

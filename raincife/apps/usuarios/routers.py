@@ -9,6 +9,7 @@ from usuarios.handlers import UsuarioListHandler
 from usuarios.handlers import UsuarioCreateHandler
 from usuarios.handlers import UsuarioUpdateHandler
 from usuarios.handlers import UsuarioLoginHandler
+from usuarios.handlers import UsuarioLogoutHandler
 
 
 base_router = '/api/v1/usuarios{}'
@@ -18,4 +19,5 @@ routers = [
     (base_router.format('/alterar/'), UsuarioUpdateHandler),
     (base_router.format('/criar/'), UsuarioCreateHandler),
     (base_router.format('/entrar/'), UsuarioLoginHandler),
+    (base_router.format('/sair/'), UsuarioLogoutHandler),
 ]

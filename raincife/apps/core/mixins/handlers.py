@@ -2,9 +2,17 @@
 
 from tornado import gen
 from jsonado.handlers import ReDBHandler
+from decouple import config
 
 
-class URLQueryMixin(ReDBHandler):
+class CurrentUserMixin(ReDBHandler):
+
+    def get_current_user(self):
+        return self.get_secure_cookie(
+            config('USER_AUTH_COOKIE', default='user', cast=str))
+
+
+class URLQueryMixin(CurrentUserMixin):
 
     @gen.coroutine
     def get_url_query(self, arguments):

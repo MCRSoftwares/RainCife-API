@@ -1,19 +1,21 @@
 # -*- coding: utf-8 -*-
 
-from jsonado.handlers.generic import ReDBHandler
+from core.mixins import CurrentUserMixin
 from core.exceptions import AuthError
 from usuarios.db.tables import Usuario
 from tokens.db.tables import Token
 from tornado import gen
+from tornado.web import authenticated
 import json
 
 
-class UsuarioUpdateHandler(ReDBHandler):
+class UsuarioUpdateHandler(CurrentUserMixin):
     """
     Handler responsável pela alteração de usuários existentes no banco.
     """
     table = Usuario
 
+    @authenticated
     @gen.coroutine
     def post(self):
         """
