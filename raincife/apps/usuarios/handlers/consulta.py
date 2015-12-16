@@ -38,7 +38,10 @@ class UsuarioLoginHandler(ReDBHandler):
 
     @gen.coroutine
     def post(self):
-        data = json.loads(self.request.body)
+        try:
+            data = json.loads(self.request.body)
+        except ValueError:
+            data = self.request.arguments
         response = (yield self.authenticate(data))
         self.write(response)
 
