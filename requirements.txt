@@ -6,3 +6,4 @@ tornado==4.2.1
 pip==7.1.2
 python-decouple==3.0
 -e git+https://github.com/victorfsf/jsonado.git@develop#egg=jsonado
+LEPL==5.1.3

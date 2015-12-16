@@ -4,9 +4,12 @@ from jsonado.handlers.generic import ReDBHandler
 from core.exceptions import ValidationError
 from core.utils import gen_pw
 from core.enums import USER_AUTH_COOKIE
+from core.enums import TIMEZONE
 from usuarios.db.tables import Usuario
 from tokens.db.tables import Token
+from datetime import datetime
 from tornado import gen
+import rethinkdb as r
 import json
 
 
@@ -80,6 +83,7 @@ class UsuarioCreateHandler(ReDBHandler):
 
         if not usuario_exists and not email_exists:
             # Executa a inserção do usuário.
+            data['criado_em'] = r.expr(datetime.now(TIMEZONE))
             db_response = (yield self.docs.insert(data).run())
             response = {
                 'data': [
