@@ -10,6 +10,9 @@ from tornado.web import authenticated
 from core.utils import is_email
 from core.utils import check_pw
 from core.enums import USER_AUTH_COOKIE
+from core.enums import TIMEZONE
+from datetime import datetime
+import rethinkdb as r
 import json
 
 
@@ -35,8 +38,7 @@ class UsuarioLoginHandler(ReDBHandler):
 
     @gen.coroutine
     def post(self):
-        data = (self.request.arguments if self.request.arguments
-                else json.loads(self.request.body))
+        data = json.loads(self.request.body)
         response = (yield self.authenticate(data))
         self.write(response)
 
@@ -70,7 +72,10 @@ class UsuarioLoginHandler(ReDBHandler):
                         {
                             'login': usuario['id'],
                             'token': (yield Token.docs.get(
-                                token_id).pluck('token').run())['token']
+                                token_id).pluck('token').run())['token'],
+                            'response': (yield self.docs.get(
+                                usuario['id']).update({'ultimo_login': r.expr(
+                                    datetime.now(TIMEZONE))}).run())
                         }
                     ],
                     'status': 201
