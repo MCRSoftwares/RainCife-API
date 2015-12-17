@@ -31,12 +31,15 @@ class UsuarioListHandler(CORSMixin):
 
 
 class UsuarioLogadoHandler(CORSMixin):
+    """
+    Handler responsável por detalhar o usuário logado.
+    """
     table = Usuario
 
     @gen.coroutine
     def get(self):
         try:
-            usuario = self.docs.get(self.get_current_user())
+            usuario = self.docs.get(self.get_argument('usuario'))
             response = {
                 'data': [
                     (yield usuario.without(
@@ -58,6 +61,9 @@ class UsuarioLogadoHandler(CORSMixin):
 
 
 class UsuarioInfoHandler(CORSMixin):
+    """
+    Handler responsável por detalhar um usuario especifico
+    """
     table = Usuario
 
     @gen.coroutine
@@ -85,6 +91,9 @@ class UsuarioInfoHandler(CORSMixin):
 
 
 class UsuarioLoginHandler(CORSHandler):
+    """
+    Handler responsável por validar e realizar o login.
+    """
     table = Usuario
 
     @gen.coroutine
@@ -110,10 +119,12 @@ class UsuarioLoginHandler(CORSHandler):
         }
 
         if not usuario:
+            # Se o usuário não for encontrado
             self.set_status(401)
             raise gen.Return(response)
 
         usuario = usuario.pop(0)
+        # validação da senha fornecida
         if check_pw(senha, usuario['senha']):
             response = {
                 'data': [
@@ -133,6 +144,9 @@ class UsuarioLoginHandler(CORSHandler):
 
 
 class UsuarioLogoutHandler(CORSMixin):
+    """
+    Handler responsável por realizar o logout.
+    """
     table = Usuario
 
     @gen.coroutine
