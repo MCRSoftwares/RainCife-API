@@ -87,6 +87,7 @@ class UsuarioLoginHandler(ReDBHandler):
                     ],
                     'status': 201
                 }
+                self.set_status(201)
                 raise gen.Return(response)
 
             self.set_status(401)
