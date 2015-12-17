@@ -49,8 +49,7 @@ class MarcadorCreateHandler(CORSMixin):
                 raise ValidationError(code='invalid_type_for_field', args=[
                     self.post_fields[field], field, type(value)])
 
-        db_response = (yield self.docs.new_marcador(
-            data['usuario_id'], data).run())
+        db_response = (yield self.docs.new_marcador(**data).run())
         response = {
             'data': [
                 {

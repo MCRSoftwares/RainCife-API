@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from jsonado.db import tables
-from jsonado.core.utils import get_module
 from datetime import datetime
 from decouple import config
 import rethinkdb as r
@@ -12,19 +11,18 @@ class MarcadorReQL(tables.ReQL):
     Classe responsável por executar as consultas realizadas no Manager que
     a referencia.
     """
-    def new_marcador(self, usuario_id, **kwargs):
+    def new_marcador(self, **kwargs):
         """
         Método que adiciona um novo marcador para
         o usuário fornecido através do ID.
         """
-        Usuario = get_module('usuarios.db.tables', 'Usuario')
-        return Usuario.docs.get(usuario_id).raw().do(
-            self.docs.insert({
-                'usuario_id': r.row['id'],
-                'criado_em': r.expr(datetime.now(
-                    r.make_timezone(config('TIMEZONE', default='-03:00'))))
-            }.update(**kwargs)).raw()
-        )
+        data = {
+            'usuario_id': kwargs.pop('usuario_id', None),
+            'criado_em': r.expr(datetime.now(r.make_timezone(
+                config('TIMEZONE', default='-03:00'))))
+        }
+        data.update(kwargs)
+        return self.insert(data)
 
 
 class MarcadorManager(tables.Manager):
@@ -36,8 +34,8 @@ class MarcadorManager(tables.Manager):
         return MarcadorReQL(db=self)
 
     @tables.reql
-    def new_marcador(self, usuario_id, **kwargs):
+    def new_marcador(self, **kwargs):
         """
         Método que executa um método com mesmo nome, definido na ReQL.
         """
-        return self.get_reql().new_marcador(usuario_id, **kwargs)
+        return self.get_reql().new_marcador(**kwargs)
