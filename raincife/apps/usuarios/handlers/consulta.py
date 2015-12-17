@@ -41,15 +41,19 @@ class UsuarioLoginHandler(ReDBHandler):
         try:
             data = json.loads(self.request.body)
         except ValueError:
-            data = self.request.arguments
+            data = None
         response = (yield self.authenticate(data))
         self.write(response)
 
     @gen.coroutine
-    def authenticate(self, data):
+    def authenticate(self, data=None):
         if not self.get_secure_cookie(USER_AUTH_COOKIE):
-            login = data.pop('login', None)
-            senha = data.pop('senha', None)
+            if not data:
+                login = self.get_argument('login', None)
+                senha = self.get_argument('senha', None)
+            else:
+                login = data.pop('login', None)
+                senha = data.pop('senha', None)
             table_index = 'email' if is_email(login) else 'usuario'
             usuario_query = self.docs.get_all(login, index=table_index)
             usuario = (yield usuario_query.pluck('id', 'senha').run())
