@@ -27,8 +27,68 @@ class UsuarioListHandler(CurrentUserMixin):
         Método assíncrono responsável por retornar
         os dados recuperados do banco via GET.
         """
-        self.set_secure_cookie(USER_AUTH_COOKIE, 'teste')
-        self.write({'data': (yield self.url_query)})
+        self.write({'data': (yield self.get_url_query())})
+
+    @gen.coroutine
+    def get_url_query(self):
+        raise gen.Return((yield self.docs.all().without(
+            'ultimo_login', 'criado_em', 'senha').run()))
+
+
+class UsuarioLogadoHandler(CurrentUserMixin):
+    table = Usuario
+
+    @authenticated
+    @gen.coroutine
+    def get(self):
+        try:
+            usuario = self.docs.get(self.get_current_user())
+            response = {
+                'data': [
+                    (yield usuario.without(
+                     'senha', 'id', 'criado_em', 'ultimo_login').run())
+                ],
+                'status': 200
+            }
+        except r.ReqlNonExistenceError:
+            response = {
+                'data': [
+                    {
+                        'usuario': u'Usuário não encontrado.'
+                    }
+                ],
+                'status': 404
+            }
+            self.set_status(404)
+        self.write(response)
+
+
+class UsuarioInfoHandler(CurrentUserMixin):
+    table = Usuario
+
+    @authenticated
+    @gen.coroutine
+    def get(self, usuario):
+        try:
+            usuario = self.docs.get_all(usuario, index='usuario').without(
+                'senha', 'id', 'criado_em', 'ultimo_login')
+            response = {
+                'data': [
+                    (yield (yield usuario.run(cursor=True)).next())
+                ],
+                'status': 200
+            }
+        except r.ReqlCursorEmpty:
+            response = {
+                'data': [
+                    {
+                        'usuario': u'Usuário não encontrado.'
+                    }
+                ],
+                'status': 404
+            }
+            self.set_status(404)
+        self.write(response)
 
 
 class UsuarioLoginHandler(CORSHandler):
@@ -36,22 +96,15 @@ class UsuarioLoginHandler(CORSHandler):
 
     @gen.coroutine
     def post(self):
-        try:
-            data = json.loads(self.request.body)
-        except ValueError:
-            data = None
+        data = json.loads(self.request.body)
         response = (yield self.authenticate(data))
         self.write(response)
 
     @gen.coroutine
     def authenticate(self, data=None):
         if not self.get_secure_cookie(USER_AUTH_COOKIE):
-            if not data:
-                login = self.get_argument('login', None)
-                senha = self.get_argument('senha', None)
-            else:
-                login = data.pop('login', None)
-                senha = data.pop('senha', None)
+            login = data.pop('login', None)
+            senha = data.pop('senha', None)
             table_index = 'email' if is_email(login) else 'usuario'
             usuario_query = self.docs.get_all(login, index=table_index)
             usuario = (yield usuario_query.pluck('id', 'senha').run())

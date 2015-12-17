@@ -10,6 +10,8 @@ from usuarios.handlers import UsuarioCreateHandler
 from usuarios.handlers import UsuarioUpdateHandler
 from usuarios.handlers import UsuarioLoginHandler
 from usuarios.handlers import UsuarioLogoutHandler
+from usuarios.handlers import UsuarioLogadoHandler
+from usuarios.handlers import UsuarioInfoHandler
 
 
 base_router = '/api/v1/usuarios{}'
@@ -20,4 +22,6 @@ routers = [
     (base_router.format('/criar/'), UsuarioCreateHandler),
     (base_router.format('/entrar/'), UsuarioLoginHandler),
     (base_router.format('/sair/'), UsuarioLogoutHandler),
+    (base_router.format('/logado/'), UsuarioLogadoHandler),
+    (base_router.format('/(?P<usuario>[\w-]+)/'), UsuarioInfoHandler),
 ]

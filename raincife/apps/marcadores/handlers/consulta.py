@@ -19,4 +19,8 @@ class MarcadorListHandler(CurrentUserMixin):
         Método assíncrono responsável por retornar
         os dados recuperados do banco via GET.
         """
-        self.write({'data': (yield self.url_query)})
+        self.write({'data': (yield self.get_url_query())})
+
+    @gen.coroutine
+    def get_url_query(self):
+        raise gen.Return((yield self.docs.all().without('criado_em').run()))
