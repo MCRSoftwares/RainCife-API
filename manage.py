@@ -30,7 +30,9 @@ class RaincifeCommands(Commands):
         ServerLog.info(code='dev_server_starting', args=[port])
         app = Application(routers, debug=True, autoreload=False,
                           cookie_secret=config('SECRET_KEY'),
-                          login_url='/api/v1/usuarios/entrar/')
+                          login_url='/api/v1/usuarios/entrar/',
+                          xsrf_cookies=True)
+
         app.listen(port)
         r.set_loop_type('tornado')
         ioloop = IOLoop.current()
@@ -49,7 +51,8 @@ class RaincifeCommands(Commands):
         ServerLog.info(code='dev_server_starting', args=[port])
         app = Application(
             routers, cookie_secret=config('SECRET_KEY'),
-            login_url='/api/v1/usuarios/entrar/')
+            login_url='/api/v1/usuarios/entrar/',
+            xsrf_cookies=True)
         sockets = netutil.bind_sockets(port)
         process.fork_processes(self.fork_processes)
         server = HTTPServer(app)
