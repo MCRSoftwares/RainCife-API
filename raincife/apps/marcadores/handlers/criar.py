@@ -3,7 +3,6 @@
 from core.mixins import CurrentUserMixin
 from core.exceptions import ValidationError
 from marcadores.db.tables import Marcador
-from tornado.web import authenticated
 from tornado import gen
 import json
 
@@ -19,16 +18,18 @@ class MarcadorCreateHandler(CurrentUserMixin):
         'intensidade': basestring
     }
 
-    @authenticated
     @gen.coroutine
     def post(self):
         """
         Método assíncrono responsável pelo tratamento dos dados enviados
         via POST para a aplicação.
         """
-        data = json.loads(self.request.body)
-        response = (yield self.validate(data))
-        self.write(response)
+        if self.get_current_user():
+            data = json.loads(self.request.body)
+            response = (yield self.validate(data))
+            self.write(response)
+        else:
+            self.set_status(403)
 
     @gen.coroutine
     def validate(self, data):
