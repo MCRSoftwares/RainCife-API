@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from jsonado.handlers.generic import ReDBHandler
+from jsonado.handlers import CORSHandler
 from core.exceptions import ValidationError
 from core.utils import gen_pw
 from core.enums import USER_AUTH_COOKIE
@@ -12,7 +12,7 @@ import rethinkdb as r
 import json
 
 
-class UsuarioCreateHandler(ReDBHandler):
+class UsuarioCreateHandler(CORSHandler):
     """
     Handler responsável pela criação de novos usuários.
     """

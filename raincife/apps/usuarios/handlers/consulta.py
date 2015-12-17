@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from core.mixins import URLQueryMixin
 from core.mixins import CurrentUserMixin
-from core.mixins import CORSHandler
+from jsonado.handlers import CORSHandler
 from usuarios.db.tables import Usuario
 from tornado import gen
 from tornado.web import authenticated
@@ -15,7 +14,7 @@ import rethinkdb as r
 import json
 
 
-class UsuarioListHandler(URLQueryMixin):
+class UsuarioListHandler(CurrentUserMixin):
     """
     Handler responsável pela listagem de usuários existentes no banco.
     """

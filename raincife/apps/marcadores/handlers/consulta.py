@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from core.mixins import URLQueryMixin
+from core.mixins import CurrentUserMixin
 from marcadores.db.tables import Marcador
 from tornado import gen
 from tornado.web import authenticated
 
 
-class MarcadorListHandler(URLQueryMixin):
+class MarcadorListHandler(CurrentUserMixin):
     """
     Handler responsável pela listagem de marcadores existentes no banco.
     """
