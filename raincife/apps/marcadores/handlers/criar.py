@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from jsonado.handlers import CurrentUserMixin
+from core.mixins import CurrentUserMixin
 from core.exceptions import ValidationError
 from marcadores.db.tables import Marcador
 from tornado import gen
