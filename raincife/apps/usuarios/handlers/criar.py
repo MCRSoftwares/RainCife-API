@@ -6,7 +6,6 @@ from core.utils import gen_pw
 from core.enums import USER_AUTH_COOKIE
 from core.enums import TIMEZONE
 from usuarios.db.tables import Usuario
-from tokens.db.tables import Token
 from datetime import datetime
 from tornado import gen
 import rethinkdb as r
@@ -98,8 +97,6 @@ class UsuarioCreateHandler(ReDBHandler):
                 ],
                 'status': 201
             }
-            (yield Token.docs.new_token(
-                usuario_id=db_response['generated_keys'][0]).run())
             self.set_secure_cookie(
                 USER_AUTH_COOKIE, db_response['generated_keys'][0])
         raise gen.Return(response)

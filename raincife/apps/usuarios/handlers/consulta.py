@@ -2,9 +2,8 @@
 
 from core.mixins import URLQueryMixin
 from core.mixins import CurrentUserMixin
-from jsonado.handlers.generic import ReDBHandler
+from core.mixins import CORSHandler
 from usuarios.db.tables import Usuario
-from tokens.db.tables import Token
 from tornado import gen
 from tornado.web import authenticated
 from core.utils import is_email
@@ -33,7 +32,7 @@ class UsuarioListHandler(URLQueryMixin):
         self.write({'data': (yield self.url_query)})
 
 
-class UsuarioLoginHandler(ReDBHandler):
+class UsuarioLoginHandler(CORSHandler):
     table = Usuario
 
     @gen.coroutine
@@ -69,25 +68,22 @@ class UsuarioLoginHandler(ReDBHandler):
             if not usuario:
                 self.set_status(401)
                 raise gen.Return(response)
+
             usuario = usuario.pop(0)
             if check_pw(senha, usuario['senha']):
-                token_id = (yield Token.docs.new_token(
-                    usuario_id=usuario['id']).run())['generated_keys'][0]
                 self.set_secure_cookie(USER_AUTH_COOKIE, usuario['id'])
                 response = {
                     'data': [
                         {
-                            'login': usuario['id'],
-                            'token': (yield Token.docs.get(
-                                token_id).pluck('token').run())['token'],
+                            'id': usuario['id'],
                             'response': (yield self.docs.get(
                                 usuario['id']).update({'ultimo_login': r.expr(
                                     datetime.now(TIMEZONE))}).run())
                         }
                     ],
-                    'status': 201
+                    'status': 200
                 }
-                self.set_status(201)
+                self.set_status(200)
                 raise gen.Return(response)
 
             self.set_status(401)
