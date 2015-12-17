@@ -3,7 +3,7 @@
 from jsonado.db import tables
 from jsonado.core.utils import get_module
 from datetime import datetime
-from core.enums import TIMEZONE
+from decouple import config
 import rethinkdb as r
 
 
@@ -31,8 +31,13 @@ class UsuarioReQL(tables.ReQL):
             })
 
     def new_usuario(self, data):
-        data['criado_em'] = r.expr(datetime.now(TIMEZONE))
+        data['criado_em'] = r.expr(datetime.now(
+            r.make_timezone(config('TIMEZONE', default='-03:00'))))
         return self.insert(data)
+
+    def novo_login(self):
+        return self.update({'ultimo_login': r.expr(datetime.now(
+            r.make_timezone(config('TIMEZONE', default='-03:00'))))})
 
 
 class UsuarioManager(tables.Manager):
@@ -60,3 +65,7 @@ class UsuarioManager(tables.Manager):
     @tables.reql
     def new_usuario(self, data):
         return self.get_reql().new_usuario(data)
+
+    @tables.reql
+    def novo_login(self):
+        return self.get_reql().novo_login()

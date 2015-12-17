@@ -3,8 +3,8 @@
 from core.mixins import CurrentUserMixin
 from core.exceptions import ValidationError
 from marcadores.db.tables import Marcador
-from tornado import gen
 from tornado.web import authenticated
+from tornado import gen
 import json
 
 

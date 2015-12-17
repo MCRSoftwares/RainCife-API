@@ -2,6 +2,8 @@
 
 from jsonado.db import tables
 from jsonado.core.utils import get_module
+from datetime import datetime
+from decouple import config
 import rethinkdb as r
 
 
@@ -19,6 +21,8 @@ class MarcadorReQL(tables.ReQL):
         return Usuario.docs.get(usuario_id).raw().do(
             self.docs.insert({
                 'usuario_id': r.row['id'],
+                'criado_em': r.expr(datetime.now(
+                    r.make_timezone(config('TIMEZONE', default='-03:00'))))
             }.update(**kwargs)).raw()
         )
 
