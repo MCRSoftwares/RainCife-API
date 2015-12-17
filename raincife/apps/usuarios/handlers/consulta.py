@@ -1,24 +1,21 @@
 # -*- coding: utf-8 -*-
 
-from core.mixins import CurrentUserMixin
+from core.mixins import CORSMixin
 from jsonado.handlers import CORSHandler
 from usuarios.db.tables import Usuario
 from tornado import gen
-from tornado.web import authenticated
 from core.utils import is_email
 from core.utils import check_pw
-from core.enums import USER_AUTH_COOKIE
 import rethinkdb as r
 import json
 
 
-class UsuarioListHandler(CurrentUserMixin):
+class UsuarioListHandler(CORSMixin):
     """
     Handler responsável pela listagem de usuários existentes no banco.
     """
     table = Usuario
 
-    @authenticated
     @gen.coroutine
     def get(self):
         """
@@ -30,13 +27,12 @@ class UsuarioListHandler(CurrentUserMixin):
     @gen.coroutine
     def get_url_query(self):
         raise gen.Return((yield self.docs.all().without(
-            'ultimo_login', 'criado_em', 'senha').run()))
+            'ultimo_login', 'criado_em', 'senha', 'id').run()))
 
 
-class UsuarioLogadoHandler(CurrentUserMixin):
+class UsuarioLogadoHandler(CORSMixin):
     table = Usuario
 
-    @authenticated
     @gen.coroutine
     def get(self):
         try:
@@ -61,10 +57,9 @@ class UsuarioLogadoHandler(CurrentUserMixin):
         self.write(response)
 
 
-class UsuarioInfoHandler(CurrentUserMixin):
+class UsuarioInfoHandler(CORSMixin):
     table = Usuario
 
-    @authenticated
     @gen.coroutine
     def get(self, usuario):
         try:
@@ -100,62 +95,48 @@ class UsuarioLoginHandler(CORSHandler):
 
     @gen.coroutine
     def authenticate(self, data=None):
-        if not self.get_secure_cookie(USER_AUTH_COOKIE):
-            login = data.pop('login', None)
-            senha = data.pop('senha', None)
-            table_index = 'email' if is_email(login) else 'usuario'
-            usuario_query = self.docs.get_all(login, index=table_index)
-            usuario = (yield usuario_query.pluck('id', 'senha').run())
-            response = {
-                'data': [
-                    {
-                        'login': 'Usuário/Email ou Senha inválidos!'
-                    }
-                ],
-                'status': 401
-            }
-
-            if not usuario:
-                self.set_status(401)
-                raise gen.Return(response)
-
-            usuario = usuario.pop(0)
-            if check_pw(senha, usuario['senha']):
-                self.set_secure_cookie(USER_AUTH_COOKIE, usuario['id'])
-                response = {
-                    'data': [
-                        {
-                            'id': usuario['id'],
-                            'response': (yield self.docs.get(
-                                usuario['id']).novo_login().run())
-                        }
-                    ],
-                    'status': 200
-                }
-                self.set_status(200)
-                raise gen.Return(response)
-
-            self.set_status(401)
-            raise gen.Return(response)
-
+        login = data.pop('login', None)
+        senha = data.pop('senha', None)
+        table_index = 'email' if is_email(login) else 'usuario'
+        usuario_query = self.docs.get_all(login, index=table_index)
+        usuario = (yield usuario_query.pluck('id', 'senha').run())
         response = {
             'data': [
                 {
-                    'login': 'Você já está logado!'
+                    'login': 'Usuário/Email ou Senha inválidos!'
                 }
             ],
             'status': 401
         }
+
+        if not usuario:
+            self.set_status(401)
+            raise gen.Return(response)
+
+        usuario = usuario.pop(0)
+        if check_pw(senha, usuario['senha']):
+            response = {
+                'data': [
+                    {
+                        'id': usuario['id'],
+                        'response': (yield self.docs.get(
+                            usuario['id']).novo_login().run())
+                    }
+                ],
+                'status': 200
+            }
+            self.set_status(200)
+            raise gen.Return(response)
+
         self.set_status(401)
         raise gen.Return(response)
 
 
-class UsuarioLogoutHandler(CurrentUserMixin):
+class UsuarioLogoutHandler(CORSMixin):
     table = Usuario
 
     @gen.coroutine
     def get(self):
-        self.set_secure_cookie(USER_AUTH_COOKIE, '')
         self.write({
             'data': [
                 {

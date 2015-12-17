@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from core.mixins import CurrentUserMixin
+from core.mixins import CORSMixin
 from usuarios.db.tables import Usuario
 from tornado import gen
-from tornado.web import authenticated
 import json
 
 
-class UsuarioUpdateHandler(CurrentUserMixin):
+class UsuarioUpdateHandler(CORSMixin):
     """
     Handler responsável pela alteração de usuários existentes no banco.
     """
     table = Usuario
 
-    @authenticated
     @gen.coroutine
     def post(self):
         """
@@ -21,6 +19,6 @@ class UsuarioUpdateHandler(CurrentUserMixin):
         via POST para a aplicação.
         """
         data = json.loads(self.request.body)
-        usuario_id = self.get_current_user()
+        usuario_id = data['usuario_id']
         response = (yield self.docs.get(usuario_id).update(data).run())
         self.write(response)

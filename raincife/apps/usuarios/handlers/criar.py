@@ -3,7 +3,6 @@
 from jsonado.handlers import CORSHandler
 from core.exceptions import ValidationError
 from core.utils import gen_pw
-from core.enums import USER_AUTH_COOKIE
 from usuarios.db.tables import Usuario
 from tornado import gen
 import json
@@ -93,6 +92,4 @@ class UsuarioCreateHandler(CORSHandler):
                 ],
                 'status': 201
             }
-            self.set_secure_cookie(
-                USER_AUTH_COOKIE, db_response['generated_keys'][0])
         raise gen.Return(response)

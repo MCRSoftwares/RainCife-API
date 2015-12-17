@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from core.mixins import CurrentUserMixin
+from core.mixins import CORSMixin
 from core.exceptions import ValidationError
 from marcadores.db.tables import Marcador
 from tornado import gen
 import json
 
 
-class MarcadorCreateHandler(CurrentUserMixin):
+class MarcadorCreateHandler(CORSMixin):
     """
     Handler responsável pela criação de novos usuários.
     """
@@ -51,13 +51,13 @@ class MarcadorCreateHandler(CurrentUserMixin):
                 raise ValidationError(code='invalid_type_for_field', args=[
                     self.post_fields[field], field, type(value)])
 
-        usuario_id = self.get_current_user()
-        db_response = (yield self.docs.new_marcador(usuario_id, data).run())
+        db_response = (yield self.docs.new_marcador(
+            data['usuario_id'], data).run())
         response = {
             'data': [
                 {
                     'id': db_response['generated_keys'][0],
-                    'usuario_id': usuario_id,
+                    'usuario_id': data['usuario_id'],
                     'latitude': data['latitude'],
                     'longitude': data['longitude'],
                     'response': db_response
