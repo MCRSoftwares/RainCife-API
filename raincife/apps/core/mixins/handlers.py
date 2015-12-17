@@ -9,7 +9,7 @@ from tornado_cors import CorsMixin
 class CORSHandler(CorsMixin, ReDBHandler):
     CORS_HEADERS = 'Content-Type'
     CORS_ORIGIN = '*'
-    CORS_METHODS = 'POST'
+    CORS_METHODS = 'GET, PUT, POST, DELETE, OPTIONS'
     CORS_EXPOSE_HEADERS = 'Location, X-WP-TotalPages'
     CORS_CREDENTIALS = True
 
