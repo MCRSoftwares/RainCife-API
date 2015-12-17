@@ -14,7 +14,6 @@ class MarcadorCreateHandler(CurrentUserMixin):
     """
     table = Marcador
     post_fields = {
-        'usuario': basestring,
         'latitude': basestring,
         'longitude': basestring,
         'intensidade': basestring
@@ -57,7 +56,7 @@ class MarcadorCreateHandler(CurrentUserMixin):
             'data': [
                 {
                     'id': db_response['generated_keys'][0],
-                    'usuario_id': data['usuario_id'],
+                    'usuario_id': usuario_id,
                     'latitude': data['latitude'],
                     'longitude': data['longitude'],
                     'response': db_response
