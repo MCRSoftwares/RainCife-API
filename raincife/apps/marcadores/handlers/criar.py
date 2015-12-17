@@ -1,29 +1,26 @@
 # -*- coding: utf-8 -*-
 
-from jsonado.handlers import CORSHandler
+from jsonado.handlers import CurrentUserMixin
 from core.exceptions import ValidationError
-from core.utils import gen_pw
-from core.enums import USER_AUTH_COOKIE
-from core.enums import TIMEZONE
 from marcadores.db.tables import Marcador
-from usuarios.db.tables import Usuario
-from datetime import datetime
 from tornado import gen
-import rethinkdb as r
+from tornado.web import authenticated
 import json
 
 
-class UsuarioCreateHandler(CORSHandler):
+class MarcadorCreateHandler(CurrentUserMixin):
     """
     Handler responsável pela criação de novos usuários.
     """
     table = Marcador
     post_fields = {
         'usuario': basestring,
-        'senha': basestring,
-        'email': basestring
+        'latitude': basestring,
+        'longitude': basestring,
+        'intensidade': basestring
     }
 
+    @authenticated
     @gen.coroutine
     def post(self):
         """
@@ -54,5 +51,19 @@ class UsuarioCreateHandler(CORSHandler):
                 raise ValidationError(code='invalid_type_for_field', args=[
                     self.post_fields[field], field, type(value)])
 
+        usuario_id = self.get_current_user()
+        db_response = (yield self.docs.new_marcador(usuario_id, data).run())
+        response = {
+            'data': [
+                {
+                    'id': db_response['generated_keys'][0],
+                    'usuario_id': data['usuario_id'],
+                    'latitude': data['latitude'],
+                    'longitude': data['longitude'],
+                    'response': db_response
+                }
+            ],
+            'status': 201
+        }
 
         raise gen.Return(response)

@@ -4,11 +4,8 @@ from jsonado.handlers import CORSHandler
 from core.exceptions import ValidationError
 from core.utils import gen_pw
 from core.enums import USER_AUTH_COOKIE
-from core.enums import TIMEZONE
 from usuarios.db.tables import Usuario
-from datetime import datetime
 from tornado import gen
-import rethinkdb as r
 import json
 
 
@@ -82,8 +79,7 @@ class UsuarioCreateHandler(CORSHandler):
 
         if not usuario_exists and not email_exists:
             # Executa a inserção do usuário.
-            data['criado_em'] = r.expr(datetime.now(TIMEZONE))
-            db_response = (yield self.docs.insert(data).run())
+            db_response = (yield self.docs.new_usuario(data).run())
             response = {
                 'data': [
                     {

@@ -23,5 +23,5 @@ routers = [
     (base_router.format('/entrar/'), UsuarioLoginHandler),
     (base_router.format('/sair/'), UsuarioLogoutHandler),
     (base_router.format('/logado/'), UsuarioLogadoHandler),
-    (base_router.format('/(?P<usuario>[\w-]+)/'), UsuarioInfoHandler),
+    (base_router.format('/info/(?P<usuario>[\w-]+)/'), UsuarioInfoHandler),
 ]

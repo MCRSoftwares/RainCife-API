@@ -2,6 +2,9 @@
 
 from jsonado.db import tables
 from jsonado.core.utils import get_module
+from datetime import datetime
+from core.enums import TIMEZONE
+import rethinkdb as r
 
 
 class UsuarioReQL(tables.ReQL):
@@ -27,6 +30,10 @@ class UsuarioReQL(tables.ReQL):
                     row['id'], index='usuario_id').coerce_to('array')
             })
 
+    def new_usuario(self, data):
+        data['criado_em'] = r.expr(datetime.now(TIMEZONE))
+        return self.insert(data)
+
 
 class UsuarioManager(tables.Manager):
     """
@@ -49,3 +56,7 @@ class UsuarioManager(tables.Manager):
         Método que executa um método com mesmo nome, definido na ReQL.
         """
         return self.get_reql().marcadores(usuario_id)
+
+    @tables.reql
+    def new_usuario(self, data):
+        return self.get_reql().new_usuario(data)
