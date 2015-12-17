@@ -15,7 +15,8 @@ class MarcadorCreateHandler(CORSMixin):
     post_fields = {
         'latitude': basestring,
         'longitude': basestring,
-        'intensidade': basestring
+        'intensidade': basestring,
+        'usuario_id': basestring
     }
 
     @gen.coroutine
@@ -24,12 +25,9 @@ class MarcadorCreateHandler(CORSMixin):
         Método assíncrono responsável pelo tratamento dos dados enviados
         via POST para a aplicação.
         """
-        if self.get_current_user():
-            data = json.loads(self.request.body)
-            response = (yield self.validate(data))
-            self.write(response)
-        else:
-            self.set_status(403)
+        data = json.loads(self.request.body)
+        response = (yield self.validate(data))
+        self.write(response)
 
     @gen.coroutine
     def validate(self, data):
