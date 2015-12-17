@@ -3,9 +3,18 @@
 from tornado import gen
 from jsonado.handlers import ReDBHandler
 from decouple import config
+from tornado_cors import CorsMixin
 
 
-class CurrentUserMixin(ReDBHandler):
+class CORSHandler(CorsMixin, ReDBHandler):
+    CORS_HEADERS = 'Content-Type'
+    CORS_ORIGIN = '*'
+    CORS_METHODS = 'POST'
+    CORS_EXPOSE_HEADERS = 'Location, X-WP-TotalPages'
+    CORS_CREDENTIALS = True
+
+
+class CurrentUserMixin(CORSHandler):
 
     def get_current_user(self):
         return self.get_secure_cookie(
