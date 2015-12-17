@@ -108,7 +108,6 @@ class UsuarioLoginHandler(ReDBHandler):
 class UsuarioLogoutHandler(CurrentUserMixin):
     table = Usuario
 
-    @authenticated
     @gen.coroutine
     def get(self):
         self.set_secure_cookie(USER_AUTH_COOKIE, '')

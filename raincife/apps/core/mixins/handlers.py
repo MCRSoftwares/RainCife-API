@@ -12,6 +12,10 @@ class CORSHandler(CorsMixin, ReDBHandler):
     CORS_EXPOSE_HEADERS = 'Location, X-WP-TotalPages'
     CORS_CREDENTIALS = True
 
+    def __init__(self, *args, **kwargs):
+        self.set_header('Content-Type', 'application/json')
+        super(CORSHandler, self).__init__(*args, **kwargs)
+
 
 class CurrentUserMixin(CORSHandler):
 
