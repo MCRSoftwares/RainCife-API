@@ -4,6 +4,7 @@ from core.mixins import CORSMixin
 from core.exceptions import ValidationError
 from marcadores.db.tables import Marcador
 from tornado import gen
+from marcadores.sockets import sockets
 import json
 
 
@@ -27,6 +28,8 @@ class MarcadorCreateHandler(CORSMixin):
         """
         data = json.loads(self.request.body)
         response = (yield self.validate(data))
+        for socket in sockets.get('criar_marcador', []):
+            socket.write_message(data)
         self.write(response)
 
     @gen.coroutine
