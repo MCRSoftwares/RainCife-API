@@ -38,4 +38,5 @@ class MarcadorSocketHandler(websocket.WebSocketHandler):
         self.write_message(message)
 
     def on_close(self):
-        sockets.pop('criar_marcador').append(self)
+        if sockets.get('criar_marcador', None):
+            sockets.get('criar_marcador').remove(self)
