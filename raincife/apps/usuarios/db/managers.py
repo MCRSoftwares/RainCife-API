@@ -31,11 +31,17 @@ class UsuarioReQL(tables.ReQL):
             })
 
     def new_usuario(self, data):
+        """
+        Método que cria um usuário com os dados informados.
+        """
         data['criado_em'] = r.expr(datetime.now(
             r.make_timezone(config('TIMEZONE', default='-03:00'))))
         return self.insert(data)
 
     def novo_login(self):
+        """
+        Método que realiza o login e salva a data em que o usuário o realizou.
+        """
         return self.update({'ultimo_login': r.expr(datetime.now(
             r.make_timezone(config('TIMEZONE', default='-03:00'))))})
 
@@ -64,8 +70,14 @@ class UsuarioManager(tables.Manager):
 
     @tables.reql
     def new_usuario(self, data):
+        """
+        Método que executa um método com mesmo nome, definido na ReQL.
+        """
         return self.get_reql().new_usuario(data)
 
     @tables.reql
     def novo_login(self):
+        """
+        Método que executa um método com mesmo nome, definido na ReQL.
+        """
         return self.get_reql().novo_login()
