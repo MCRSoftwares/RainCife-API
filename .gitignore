@@ -19,6 +19,8 @@ lib64/
 parts/
 sdist/
 var/
+src/
+bin/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -56,7 +58,9 @@ docs/_build/
 # PyBuilder
 target/
 
-# Django
-*.log
-**/migrations/**
-!**/migrations/__init__.py
+# RethinkDB
+rethinkdb_data/
+
+# Local
+settings.ini
+temp/
